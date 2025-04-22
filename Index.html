@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Bajet Bulanan</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+    }
+    button {
+      padding: 10px 15px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .expense-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kalkulator Bajet Bulanan</h1>
+  <label>Jumlah Pendapatan (RM):</label>
+  <input type="number" id="income" placeholder="Contoh: 3000">  <h3>Perbelanjaan</h3>
+  <div id="expenses"></div>
+  <button onclick="addExpense()">Tambah Perbelanjaan</button><br><br> <button onclick="calculateBudget()">Kira Bajet</button>
+
+  <h3 id="result"></h3>  <script>
+    function addExpense() {
+      const container = document.getElementById('expenses');
+      const div = document.createElement('div');
+      div.className = 'expense-item';
+      div.innerHTML = `
+        <input type="text" placeholder="Nama perbelanjaan">
+        <input type="number" placeholder="Jumlah (RM)">
+      `;
+      container.appendChild(div);
+    }
+
+    function calculateBudget() {
+      const income = parseFloat(document.getElementById('income').value) || 0;
+      const expenseItems = document.querySelectorAll('.expense-item input[type="number"]');
+      let totalExpenses = 0;
+      expenseItems.forEach(input => {
+        totalExpenses += parseFloat(input.value) || 0;
+      });
+      const balance = income - totalExpenses;
+      document.getElementById('result').innerText = `Baki bulanan anda: RM ${balance.toFixed(2)}`;
+    }
+
+    // Tambah satu perbelanjaan default masa mula
+    window.onload = () => addExpense();
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+  </script></body>
+</html>
